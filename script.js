@@ -1,6 +1,8 @@
 import { Scene, SphereGeometry, MeshStandardMaterial, Mesh, BoxGeometry, PerspectiveCamera, ACESFilmicToneMapping, WebGLRenderer } from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { WebGLPathTracer, GradientEquirectTexture } from 'three-gpu-pathtracer'
 //import { getScaledSettings } from './utils/getScaledSettings.js'
+
 
 // init scene, renderer, camera, controls, etc
 const scene = new Scene()
@@ -43,6 +45,13 @@ texture.bottomColor.set(0x666666)
 texture.update()
 scene.environment = texture
 scene.background = texture
+
+const [ gltf ] = await Promise.all( [
+    new GLTFLoader().loadAsync( "https://raw.githubusercontent.com/gkjohnson/3d-demo-data/main/models/terrarium-robots/scene.gltf" )
+] );
+
+scene.add( gltf.scene );
+
 
 const camera = new PerspectiveCamera()
 camera.position.set(0, 1, -5)
