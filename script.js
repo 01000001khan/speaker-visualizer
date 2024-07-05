@@ -40,7 +40,7 @@ pathTracer.tiles.setScalar(1)
 pathTracer.setScene(scene, camera)
 
 
-controls = new OrbitControls( camera, renderer.domElement );
+let controls = new OrbitControls( camera, renderer.domElement );
 controls.target.y = 10;
 controls.addEventListener( 'change', () => pathTracer.updateCamera() );
 controls.update();
