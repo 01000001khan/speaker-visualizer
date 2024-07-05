@@ -35,6 +35,7 @@ pathTracer.renderScale = 1.0
 pathTracer.tiles.setScalar(1)
 pathTracer.renderDelay = 0;
 pathTracer.fadeDuration = 0;
+pathTracer.minSamples = 1; 
 //pathTracer.setBVHWorker( new ParallelMeshBVHWorker() );
 pathTracer.setScene(scene, camera)
 
