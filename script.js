@@ -1,42 +1,10 @@
 import { Scene, SphereGeometry, MeshStandardMaterial, Mesh, BoxGeometry, PerspectiveCamera, ACESFilmicToneMapping, WebGLRenderer } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { WebGLPathTracer, GradientEquirectTexture } from 'three-gpu-pathtracer'
-//import { getScaledSettings } from './utils/getScaledSettings.js'
 
 
 // init scene, renderer, camera, controls, etc
 const scene = new Scene()
-const sphereGeom = new SphereGeometry(0.49, 64, 32)
-const ball1 = new Mesh(
-    sphereGeom,
-    new MeshStandardMaterial({
-        color: '#e91e63',
-        roughness: 0.25,
-        metalness: 1
-    })
-)
-const ball2 = new Mesh(
-    sphereGeom,
-    new MeshStandardMaterial({
-        color: '#ff9800',
-        roughness: 0.1,
-        metalness: 1
-    })
-)
-const ball3 = new Mesh(
-    sphereGeom,
-    new MeshStandardMaterial({
-        color: '#2196f3',
-        roughness: 0.2,
-        metalness: 1
-    })
-)
-const ground = new Mesh(new BoxGeometry(3.5, 0.1, 1.5), new MeshStandardMaterial())
-
-ball1.position.x = -1
-ball3.position.x = 1
-ground.position.y = -0.54
-scene.add(ball1, ball2, ball3, ground)
 
 // set the environment map
 const texture = new GradientEquirectTexture()
@@ -50,8 +18,9 @@ const [ gltf ] = await Promise.all( [
     new GLTFLoader().loadAsync( "https://raw.githubusercontent.com/gkjohnson/3d-demo-data/main/models/terrarium-robots/scene.gltf" )
 ] );
 
-scene.add( gltf.scene );
+gltf.scene.scale = .1;
 
+scene.add( gltf.scene );
 
 const camera = new PerspectiveCamera()
 camera.position.set(0, 1, -5)
