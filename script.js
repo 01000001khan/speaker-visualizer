@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, ACESFilmicToneMapping, WebGLRenderer } from 'three'
+import { Scene, PerspectiveCamera, AgXToneMapping, WebGLRenderer } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { WebGLPathTracer, GradientEquirectTexture } from 'three-gpu-pathtracer'
 //import { ParallelMeshBVHWorker } from 'three-mesh-bvh/src/workers/ParallelMeshBVHWorker.js';
@@ -26,7 +26,7 @@ const camera = new PerspectiveCamera()
 
 
 const renderer = new WebGLRenderer({ antialias: true })
-renderer.toneMapping = THREE.AgXToneMapping
+renderer.toneMapping = AgXToneMapping
 document.body.appendChild(renderer.domElement)
 
 //const settings = getScaledSettings()
