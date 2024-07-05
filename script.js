@@ -26,7 +26,7 @@ const camera = new PerspectiveCamera()
 
 
 const renderer = new WebGLRenderer({ antialias: true })
-renderer.toneMapping = ACESFilmicToneMapping
+renderer.toneMapping = AgXToneMapping
 document.body.appendChild(renderer.domElement)
 
 //const settings = getScaledSettings()
