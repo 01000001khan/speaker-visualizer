@@ -33,6 +33,8 @@ document.body.appendChild(renderer.domElement)
 const pathTracer = new WebGLPathTracer(renderer)
 pathTracer.renderScale = 1.0
 pathTracer.tiles.setScalar(1)
+pathTracer.renderDelay = 0;
+pathTracer.fadeDuration = 0;
 //pathTracer.setBVHWorker( new ParallelMeshBVHWorker() );
 pathTracer.setScene(scene, camera)
 
