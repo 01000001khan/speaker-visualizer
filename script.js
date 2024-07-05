@@ -18,7 +18,7 @@ const [ gltf ] = await Promise.all( [
     new GLTFLoader().loadAsync( "https://raw.githubusercontent.com/gkjohnson/3d-demo-data/main/models/terrarium-robots/scene.gltf" )
 ] );
 
-gltf.scene.scale = .1;
+gltf.scene.scale.set(.1,.1,.1);
 
 scene.add( gltf.scene );
 
