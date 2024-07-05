@@ -15,7 +15,7 @@ scene.environment = texture
 scene.background = texture
 
 const [ gltf ] = await Promise.all( [
-    new GLTFLoader().loadAsync( "https://raw.githubusercontent.com/gkjohnson/3d-demo-data/main/models/terrarium-robots/scene.gltf" )
+    new GLTFLoader().loadAsync( "./scene.glb" )
 ] );
 
 gltf.scene.scale.set(.1,.1,.1);
