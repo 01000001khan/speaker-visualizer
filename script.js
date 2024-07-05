@@ -1,4 +1,4 @@
-import { Scene, SphereGeometry, MeshStandardMaterial, Mesh, BoxGeometry, PerspectiveCamera, ACESFilmicToneMapping, WebGLRenderer } from 'three'
+import { Scene, PerspectiveCamera, ACESFilmicToneMapping, WebGLRenderer } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { WebGLPathTracer, GradientEquirectTexture } from 'three-gpu-pathtracer'
 
