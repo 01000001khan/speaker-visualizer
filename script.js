@@ -20,13 +20,10 @@ const [ gltf ] = await Promise.all( [
     new GLTFLoader().loadAsync( "./scene.glb" )
 ] );
 
-gltf.scene.scale.set(.1,.1,.1);
-
 scene.add( gltf.scene );
 
 const camera = new PerspectiveCamera()
-camera.position.set(0, 1, -5)
-camera.lookAt(0, 0, 0)
+
 
 const renderer = new WebGLRenderer({ antialias: true })
 renderer.toneMapping = ACESFilmicToneMapping
