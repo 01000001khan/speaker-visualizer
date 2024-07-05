@@ -1,7 +1,7 @@
 import { Scene, PerspectiveCamera, ACESFilmicToneMapping, WebGLRenderer } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { WebGLPathTracer, GradientEquirectTexture } from 'three-gpu-pathtracer'
-import { ParallelMeshBVHWorker } from 'three-mesh-bvh/src/workers/ParallelMeshBVHWorker.js';
+//import { ParallelMeshBVHWorker } from 'three-mesh-bvh/src/workers/ParallelMeshBVHWorker.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
@@ -36,7 +36,7 @@ document.body.appendChild(renderer.domElement)
 const pathTracer = new WebGLPathTracer(renderer)
 pathTracer.renderScale = 1.0
 pathTracer.tiles.setScalar(1)
-pathTracer.setBVHWorker( new ParallelMeshBVHWorker() );
+//pathTracer.setBVHWorker( new ParallelMeshBVHWorker() );
 pathTracer.setScene(scene, camera)
 
 
