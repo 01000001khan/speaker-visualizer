@@ -1,100 +1,154 @@
-import {
-	BufferGeometry,
-	BufferAttribute,
-} from 'three';
+import { Box3, BufferAttribute } from 'three';
 import { MeshBVH } from 'three-mesh-bvh/src/core/MeshBVH.js';
+import { WorkerBase } from 'three-mesh-bvh/src/workers/utils/WorkerBase.js';
+import { convertToBufferType, isSharedArrayBufferSupported } from 'three-mesh-bvh/src/workers/utils/BufferUtils.js';
+import { GenerateMeshBVHWorker } from 'three-mesh-bvh/src/workers/GenerateMeshBVHWorker.js';
+import { ensureIndex } from 'three-mesh-bvh/src/core/build/geometryUtils.js';
 
-onmessage = ( { data } ) => {
+const DEFAULT_WORKER_COUNT = typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : 4;
+class _ParallelMeshBVHWorker extends WorkerBase {
 
-	let prevTime = performance.now();
-	function onProgressCallback( progress ) {
+	constructor() {
 
-		// account for error
-		progress = Math.min( progress, 1 );
+		const worker = new Worker( new URL( 'three-mesh-bvh/src/workers/parallelMeshBVH.worker.js', import.meta.url ), { type: 'module' } );
+		super( worker );
 
-		const currTime = performance.now();
-		if ( currTime - prevTime >= 10 && progress !== 1.0 ) {
+		this.name = 'ParallelMeshBVHWorker';
+		this.maxWorkerCount = Math.max( DEFAULT_WORKER_COUNT, 4 );
 
-			postMessage( {
+		if ( ! isSharedArrayBufferSupported() ) {
 
-				error: null,
-				serialized: null,
-				position: null,
-				progress,
-
-			} );
-			prevTime = currTime;
+			throw new Error( 'ParallelMeshBVHWorker: Shared Array Buffers are not supported.' );
 
 		}
 
 	}
 
-	const { index, position, options } = data;
-	try {
+	runTask( worker, geometry, options = {} ) {
 
-		const geometry = new BufferGeometry();
-		geometry.setAttribute( 'position', new BufferAttribute( position, 3, false ) );
-		if ( index ) {
+		return new Promise( ( resolve, reject ) => {
 
-			geometry.setIndex( new BufferAttribute( index, 1, false ) );
+			if ( ! geometry.index && ! options.indirect ) {
 
-		}
-
-		if ( options.includedProgressCallback ) {
-
-			options.onProgress = onProgressCallback;
-
-		}
-
-		if ( options.groups ) {
-
-			const groups = options.groups;
-			for ( const i in groups ) {
-
-				const group = groups[ i ];
-				geometry.addGroup( group.start, group.count, group.materialIndex );
+				ensureIndex( geometry, options );
 
 			}
 
-		}
+			if (
+				geometry.getAttribute( 'position' ).isInterleavedBufferAttribute ||
+				geometry.index && geometry.index.isInterleavedBufferAttribute
+			) {
 
-		const bvh = new MeshBVH( geometry, options );
-		const serialized = MeshBVH.serialize( bvh, { copyIndexBuffer: false } );
-		let toTransfer = [ position.buffer, ...serialized.roots ];
-		if ( serialized.index ) {
+				throw new Error( 'ParallelMeshBVHWorker: InterleavedBufferAttribute are not supported for the geometry attributes.' );
 
-			toTransfer.push( serialized.index.buffer );
+			}
 
-		}
+			worker.onerror = e => {
 
-		toTransfer = toTransfer.filter( v => ( typeof SharedArrayBuffer === 'undefined' ) || ! ( v instanceof SharedArrayBuffer ) );
+				reject( new Error( `ParallelMeshBVHWorker: ${ e.message }` ) );
 
-		if ( bvh._indirectBuffer ) {
+			};
 
-			toTransfer.push( serialized.indirectBuffer.buffer );
+			worker.onmessage = e => {
 
-		}
+				const { data } = e;
 
-		postMessage( {
+				if ( data.error ) {
 
-			error: null,
-			serialized,
-			position,
-			progress: 1,
+					reject( new Error( data.error ) );
+					worker.onmessage = null;
 
-		}, toTransfer );
+				} else if ( data.serialized ) {
 
-	} catch ( error ) {
+					const { serialized, position } = data;
+					const bvh = MeshBVH.deserialize( serialized, geometry, { setIndex: false } );
+					const boundsOptions = {
+						setBoundingBox: true,
+						...options,
+					};
 
-		postMessage( {
+					// we need to replace the arrays because they're neutered entirely by the
+					// webworker transfer.
+					geometry.attributes.position.array = position;
+					if ( serialized.index ) {
 
-			error,
-			serialized: null,
-			position: null,
-			progress: 1,
+						if ( geometry.index ) {
+
+							geometry.index.array = serialized.index;
+
+						} else {
+
+							const newIndex = new BufferAttribute( serialized.index, 1, false );
+							geometry.setIndex( newIndex );
+
+						}
+
+					}
+
+					if ( boundsOptions.setBoundingBox ) {
+
+						geometry.boundingBox = bvh.getBoundingBox( new Box3() );
+
+					}
+
+					if ( options.onProgress ) {
+
+						options.onProgress( data.progress );
+
+					}
+
+					resolve( bvh );
+					worker.onmessage = null;
+
+				} else if ( options.onProgress ) {
+
+					options.onProgress( data.progress );
+
+				}
+
+			};
+
+			const index = geometry.index ? geometry.index.array : null;
+			const position = geometry.attributes.position.array;
+			worker.postMessage( {
+
+				operation: 'BUILD_BVH',
+				maxWorkerCount: this.maxWorkerCount,
+				index: convertToBufferType( index, SharedArrayBuffer ),
+				position: convertToBufferType( position, SharedArrayBuffer ),
+				options: {
+					...options,
+					onProgress: null,
+					includedProgressCallback: Boolean( options.onProgress ),
+					groups: [ ... geometry.groups ],
+				},
+
+			} );
 
 		} );
 
 	}
 
-};
+}
+
+export class ParallelMeshBVHWorker {
+
+	constructor() {
+
+		if ( isSharedArrayBufferSupported() ) {
+
+			return new _ParallelMeshBVHWorker();
+
+		} else {
+
+			console.warn( 'ParallelMeshBVHWorker: SharedArrayBuffers not supported. Falling back to single-threaded GenerateMeshBVHWorker.' );
+
+			const object = new GenerateMeshBVHWorker();
+			object.maxWorkerCount = DEFAULT_WORKER_COUNT;
+			return object;
+
+		}
+
+	}
+
+}
