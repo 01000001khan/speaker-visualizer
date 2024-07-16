@@ -60,7 +60,7 @@ pathTracer.setScene(scene, camera)
 
 
 let controls = new OrbitControls( camera, renderer.domElement );
-controls.target.set(-2.4, -3.2, .6);
+controls.target.set(-2.4, .6, -3.2);
 controls.addEventListener( 'change', () => pathTracer.updateCamera() );
 controls.update();
 
