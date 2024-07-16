@@ -14,12 +14,12 @@ import { raycastFirst } from './cast/raycastFirst.template.js';
 import { intersectsGeometry } from './cast/intersectsGeometry.template.js';
 import { closestPointToGeometry } from './cast/closestPointToGeometry.template.js';
 
-import { iterateOverTriangles_indirect } from './utils/iterationUtils_indirect.template.js';
-import { refit_indirect } from './cast/refit_indirect.template.js';
-import { raycast_indirect } from './cast/raycast_indirect.template.js';
-import { raycastFirst_indirect } from './cast/raycastFirst_indirect.template.js';
-import { intersectsGeometry_indirect } from './cast/intersectsGeometry_indirect.template.js';
-import { closestPointToGeometry_indirect } from './cast/closestPointToGeometry_indirect.template.js';
+import { iterateOverTriangles_indirect } from './utils/iterationUtils.template.js';
+import { refit_indirect } from './cast/refit.template.js';
+import { raycast_indirect } from './cast/raycast.template.js';
+import { raycastFirst_indirect } from './cast/raycastFirst.template.js';
+import { intersectsGeometry_indirect } from './cast/intersectsGeometry.template.js';
+import { closestPointToGeometry_indirect } from './cast/closestPointToGeometry.template.js';
 import { isSharedArrayBufferSupported } from '../utils/BufferUtils.js';
 import { setTriangle } from '../utils/TriangleUtilities.js';
 import { bvhcast } from './cast/bvhcast.js';

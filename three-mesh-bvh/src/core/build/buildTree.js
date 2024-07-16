@@ -5,7 +5,7 @@ import { MeshBVHNode } from '../MeshBVHNode.js';
 import { BYTES_PER_NODE } from '../Constants.js';
 
 import { partition } from './sortUtils.template.js';
-import { partition_indirect } from './sortUtils_indirect.template.js';
+import { partition_indirect } from './sortUtils.template.js';
 import { countNodes, populateBuffer } from './buildUtils.js';
 
 export function generateIndirectBuffer( geometry, useSharedArrayBuffer ) {
