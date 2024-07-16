@@ -1,7 +1,7 @@
 import { Box3, BufferAttribute } from 'three';
 import { MeshBVH } from 'three-mesh-bvh/src/core/MeshBVH.js';
 import { WorkerBase } from 'three-mesh-bvh/src/workers/utils/WorkerBase.js';
-import { convertToBufferType, isSharedArrayBufferSupported } from 'three-mesh-bvh/src/workers/utils/BufferUtils.js';
+import { convertToBufferType, isSharedArrayBufferSupported } from 'three-mesh-bvh/src/utils/BufferUtils.js';
 import { GenerateMeshBVHWorker } from 'three-mesh-bvh/src/workers/GenerateMeshBVHWorker.js';
 import { ensureIndex } from 'three-mesh-bvh/src/core/build/geometryUtils.js';
 
