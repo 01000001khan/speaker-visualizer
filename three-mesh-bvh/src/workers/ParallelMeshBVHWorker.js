@@ -1,16 +1,16 @@
 import { Box3, BufferAttribute } from 'three';
-import { MeshBVH } from 'three-mesh-bvh/src/core/MeshBVH.js';
-import { WorkerBase } from 'three-mesh-bvh/src/workers/utils/WorkerBase.js';
-import { convertToBufferType, isSharedArrayBufferSupported } from 'three-mesh-bvh/src/utils/BufferUtils.js';
-import { GenerateMeshBVHWorker } from 'three-mesh-bvh/src/workers/GenerateMeshBVHWorker.js';
-import { ensureIndex } from 'three-mesh-bvh/src/core/build/geometryUtils.js';
+import { MeshBVH } from '../core/MeshBVH.js';
+import { WorkerBase } from './utils/WorkerBase.js';
+import { convertToBufferType, isSharedArrayBufferSupported } from '../utils/BufferUtils.js';
+import { GenerateMeshBVHWorker } from './GenerateMeshBVHWorker.js';
+import { ensureIndex } from '../core/build/geometryUtils.js';
 
 const DEFAULT_WORKER_COUNT = typeof navigator !== 'undefined' ? navigator.hardwareConcurrency : 4;
 class _ParallelMeshBVHWorker extends WorkerBase {
 
 	constructor() {
 
-		const worker = new Worker( new URL( 'three-mesh-bvh/src/workers/parallelMeshBVH.worker.js', import.meta.url ), { type: 'module' } );
+		const worker = new Worker( new URL( './parallelMeshBVH.worker.js', import.meta.url ), { type: 'module' } );
 		super( worker );
 
 		this.name = 'ParallelMeshBVHWorker';
