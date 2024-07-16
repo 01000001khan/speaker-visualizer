@@ -29,7 +29,7 @@ const scene = new Scene()
 // set the environment map
 const texture = new GradientEquirectTexture()
 texture.bottomColor.set(0x000000)
-texture.bottomColor.set(0x000000)
+texture.topColor.set(0x000000)
 texture.update()
 scene.environment = texture
 scene.background = texture
