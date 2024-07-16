@@ -4,12 +4,12 @@ import { setTriangle } from '../../utils/TriangleUtilities.js';
 
 export function intersectTris/* @echo INDIRECT_STRING */( bvh, side, ray, offset, count, intersections, near, far ) {
 
-	const { geometry, _indirectBuffer } = bvh;
+	const { geometry, Buffer } = bvh;
 	for ( let i = offset, end = offset + count; i < end; i ++ ) {
 
 		/* @if INDIRECT */
 
-		let vi = _indirectBuffer ? _indirectBuffer[ i ] : i;
+		let vi = Buffer ? Buffer[ i ] : i;
 		intersectTri( geometry, side, ray, vi, intersections, near, far );
 
 		/* @else */
@@ -24,7 +24,7 @@ export function intersectTris/* @echo INDIRECT_STRING */( bvh, side, ray, offset
 
 export function intersectClosestTri/* @echo INDIRECT_STRING */( bvh, side, ray, offset, count, near, far ) {
 
-	const { geometry, _indirectBuffer } = bvh;
+	const { geometry, Buffer } = bvh;
 	let dist = Infinity;
 	let res = null;
 	for ( let i = offset, end = offset + count; i < end; i ++ ) {
@@ -32,7 +32,7 @@ export function intersectClosestTri/* @echo INDIRECT_STRING */( bvh, side, ray, 
 		let intersection;
 		/* @if INDIRECT */
 
-		intersection = intersectTri( geometry, side, ray, _indirectBuffer ? _indirectBuffer[ i ] : i, null, near, far );
+		intersection = intersectTri( geometry, side, ray, Buffer ? Buffer[ i ] : i, null, near, far );
 
 		/* @else */
 

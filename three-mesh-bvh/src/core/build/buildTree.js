@@ -5,7 +5,7 @@ import { MeshBVHNode } from '../MeshBVHNode.js';
 import { BYTES_PER_NODE } from '../Constants.js';
 
 import { partition } from './sortUtils.template.js';
-import { partition_indirect } from './sortUtils.template.js';
+import { partition } from './sortUtils.template.js';
 import { countNodes, populateBuffer } from './buildUtils.js';
 
 export function generateIndirectBuffer( geometry, useSharedArrayBuffer ) {
@@ -37,10 +37,10 @@ export function buildTree( bvh, triangleBounds, offset, count, options ) {
 		onProgress,
 		indirect,
 	} = options;
-	const indirectBuffer = bvh._indirectBuffer;
+	const indirectBuffer = bvh.Buffer;
 	const geometry = bvh.geometry;
 	const indexArray = geometry.index ? geometry.index.array : null;
-	const partionFunc = indirect ? partition_indirect : partition;
+	const partionFunc = indirect ? partition : partition;
 
 	// generate intermediate variables
 	const totalTriangles = getTriCount( geometry );
@@ -143,7 +143,7 @@ export function buildPackedTree( bvh, options ) {
 	const geometry = bvh.geometry;
 	if ( options.indirect ) {
 
-		bvh._indirectBuffer = generateIndirectBuffer( geometry, options.useSharedArrayBuffer );
+		bvh.Buffer = generateIndirectBuffer( geometry, options.useSharedArrayBuffer );
 
 		if ( hasGroupGaps( geometry ) && ! options.verbose ) {
 
@@ -156,7 +156,7 @@ export function buildPackedTree( bvh, options ) {
 
 	}
 
-	if ( ! bvh._indirectBuffer ) {
+	if ( ! bvh.Buffer ) {
 
 		ensureIndex( geometry, options );
 

@@ -2,7 +2,7 @@ import { intersectRay } from '../utils/intersectUtils.js';
 import { COUNT, OFFSET, LEFT_NODE, RIGHT_NODE, IS_LEAF } from '../utils/nodeBufferUtils.js';
 import { BufferStack } from '../utils/BufferStack.js';
 import { intersectTris } from '../utils/iterationUtils.template.js';
-import { intersectTris_indirect } from '../utils/iterationUtils.template.js';
+import { intersectTris } from '../utils/iterationUtils.template.js';
 
 export function raycast/* @echo INDIRECT_STRING */( bvh, root, side, ray, intersects, near, far ) {
 
@@ -24,7 +24,7 @@ function _raycast( nodeIndex32, bvh, side, ray, intersects, near, far ) {
 
 		/* @if INDIRECT */
 
-		intersectTris_indirect( bvh, side, ray, offset, count, intersects, near, far );
+		intersectTris( bvh, side, ray, offset, count, intersects, near, far );
 
 		/* @else */
 

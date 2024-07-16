@@ -69,7 +69,7 @@ onmessage = ( { data } ) => {
 
 		toTransfer = toTransfer.filter( v => ( typeof SharedArrayBuffer === 'undefined' ) || ! ( v instanceof SharedArrayBuffer ) );
 
-		if ( bvh._indirectBuffer ) {
+		if ( bvh.Buffer ) {
 
 			toTransfer.push( serialized.indirectBuffer.buffer );
 

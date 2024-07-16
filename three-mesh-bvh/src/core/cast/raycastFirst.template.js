@@ -2,7 +2,7 @@ import { COUNT, OFFSET, LEFT_NODE, RIGHT_NODE, IS_LEAF, SPLIT_AXIS } from '../ut
 import { BufferStack } from '../utils/BufferStack.js';
 import { intersectRay } from '../utils/intersectUtils.js';
 import { intersectClosestTri } from '../utils/iterationUtils.template.js';
-import { intersectClosestTri_indirect } from '../utils/iterationUtils.template.js';
+import { intersectClosestTri } from '../utils/iterationUtils.template.js';
 
 const _xyzFields = [ 'x', 'y', 'z' ];
 
@@ -29,7 +29,7 @@ function _raycastFirst( nodeIndex32, bvh, side, ray, near, far ) {
 
 		/* @if INDIRECT */
 
-		return intersectClosestTri_indirect( bvh, side, ray, offset, count, near, far );
+		return intersectClosestTri( bvh, side, ray, offset, count, near, far );
 
 		/* @else */
 

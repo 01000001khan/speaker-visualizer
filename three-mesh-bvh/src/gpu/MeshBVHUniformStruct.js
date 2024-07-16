@@ -46,7 +46,7 @@ export class MeshBVHUniformStruct {
 		// dereference a new index attribute if we're using indirect storage
 		if ( bvh.indirect ) {
 
-			const indirectBuffer = bvh._indirectBuffer;
+			const indirectBuffer = bvh.Buffer;
 			if (
 				this._cachedIndexAttr === null ||
 				this._cachedIndexAttr.count !== indirectBuffer.length

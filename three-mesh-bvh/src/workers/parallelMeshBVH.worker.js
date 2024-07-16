@@ -67,7 +67,7 @@ onmessage = async ( { data } ) => {
 
 		// create a proxy bvh structure
 		const proxyBvh = {
-			_indirectBuffer: indirectBuffer,
+			Buffer: indirectBuffer,
 			geometry: geometry,
 		};
 
@@ -190,7 +190,7 @@ onmessage = async ( { data } ) => {
 		} = data;
 
 		const proxyBvh = {
-			_indirectBuffer: indirectBuffer,
+			Buffer: indirectBuffer,
 			geometry: getGeometry( index, position ),
 		};
 
