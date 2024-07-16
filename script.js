@@ -28,8 +28,8 @@ const scene = new Scene()
 
 // set the environment map
 const texture = new GradientEquirectTexture()
-texture.bottomColor.set(0xffffff)
-texture.bottomColor.set(0x666666)
+texture.bottomColor.set(0x0)
+texture.bottomColor.set(0x0)
 texture.update()
 scene.environment = texture
 scene.background = texture
@@ -60,7 +60,7 @@ pathTracer.setScene(scene, camera)
 
 
 let controls = new OrbitControls( camera, renderer.domElement );
-controls.target.set(-2.4, .6, -3.2);
+controls.target.set(-2.4, .6, 3.2);
 controls.addEventListener( 'change', () => pathTracer.updateCamera() );
 controls.update();
 
