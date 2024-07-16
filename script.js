@@ -27,12 +27,9 @@ function getScaledSettings() {
 const scene = new Scene()
 
 // set the environment map
-const texture = new GradientEquirectTexture()
-texture.bottomColor.set(0x0)
-texture.bottomColor.set(0x0)
-texture.update()
-scene.environment = texture
-scene.background = texture
+let col = new THREE.Color( 0x0 );
+scene.environment = col
+scene.background = col
 
 const [ gltf ] = await Promise.all( [
     new GLTFLoader().loadAsync( "./scene.glb" )
