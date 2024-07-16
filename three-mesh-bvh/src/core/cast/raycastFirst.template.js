@@ -1,8 +1,8 @@
 import { COUNT, OFFSET, LEFT_NODE, RIGHT_NODE, IS_LEAF, SPLIT_AXIS } from '../utils/nodeBufferUtils.js';
 import { BufferStack } from '../utils/BufferStack.js';
 import { intersectRay } from '../utils/intersectUtils.js';
-import { intersectClosestTri } from '../utils/iterationUtils.generated.js';
-import { intersectClosestTri_indirect } from '../utils/iterationUtils_indirect.generated.js';
+import { intersectClosestTri } from '../utils/iterationUtils.template.js';
+import { intersectClosestTri_indirect } from '../utils/iterationUtils_indirect.template.js';
 
 const _xyzFields = [ 'x', 'y', 'z' ];
 

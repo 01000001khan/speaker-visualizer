@@ -1,8 +1,8 @@
 import { intersectRay } from '../utils/intersectUtils.js';
 import { COUNT, OFFSET, LEFT_NODE, RIGHT_NODE, IS_LEAF } from '../utils/nodeBufferUtils.js';
 import { BufferStack } from '../utils/BufferStack.js';
-import { intersectTris } from '../utils/iterationUtils.generated.js';
-import { intersectTris_indirect } from '../utils/iterationUtils_indirect.generated.js';
+import { intersectTris } from '../utils/iterationUtils.template.js';
+import { intersectTris_indirect } from '../utils/iterationUtils_indirect.template.js';
 
 export function raycast/* @echo INDIRECT_STRING */( bvh, root, side, ray, intersects, near, far ) {
 

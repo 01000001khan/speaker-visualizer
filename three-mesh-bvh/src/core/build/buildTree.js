@@ -4,8 +4,8 @@ import { getOptimalSplit } from './splitUtils.js';
 import { MeshBVHNode } from '../MeshBVHNode.js';
 import { BYTES_PER_NODE } from '../Constants.js';
 
-import { partition } from './sortUtils.generated.js';
-import { partition_indirect } from './sortUtils_indirect.generated.js';
+import { partition } from './sortUtils.template.js';
+import { partition_indirect } from './sortUtils_indirect.template.js';
 import { countNodes, populateBuffer } from './buildUtils.js';
 
 export function generateIndirectBuffer( geometry, useSharedArrayBuffer ) {
