@@ -2,7 +2,6 @@ import { Scene, PerspectiveCamera, AgXToneMapping, WebGLRenderer } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { WebGLPathTracer, GradientEquirectTexture } from 'three-gpu-pathtracer'
 import { ParallelMeshBVHWorker } from 'three-mesh-bvh/src/workers/ParallelMeshBVHWorker.js';
-//import { threeMeshBvh } from 'https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.7.6/+esm'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
