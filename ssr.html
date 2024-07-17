@@ -73,7 +73,7 @@
 
             
             let geometry, material, mesh;
-            loader.load( './assets/camaro.glb', function ( gltf ) {
+            loader.load( './scene.glb', function ( gltf ) {
                 geometry = gltf.scene;
                 scene.add( geometry );
             },undefined,function(error){console.error(error);});
