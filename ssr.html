@@ -42,7 +42,7 @@
 
 		const params = {
 			enableSSR: true,
-			autoRotate: true,
+			autoRotate: false,
 			otherMeshes: true,
 			groundReflector: true,
 		};
@@ -68,9 +68,7 @@
 			camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 0.1, 15 );
 
 			scene = new THREE.Scene();
-			scene.background = new THREE.Color( 0x443333 );
-			scene.fog = new THREE.Fog( 0x443333, 1, 4 );
-
+			scene.background = new THREE.Color( 0x0 );
             
             let geometry, material, mesh;
             loader.load( './scene.glb', function ( gltf ) {
