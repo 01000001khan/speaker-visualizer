@@ -41,7 +41,7 @@ const [ gltf ] = await Promise.all( [
 scene.add( gltf.scene );
 
 const camera = new PerspectiveCamera()
-
+camera.fov = 35;
 
 const renderer = new WebGLRenderer({ antialias: true })
 renderer.toneMapping = AgXToneMapping
@@ -61,8 +61,8 @@ pathTracer.setScene(scene, camera)
 
 let controls = new OrbitControls( camera, renderer.domElement );
 
-camera.position.set(-2.2, 1., 5.8);
-controls.target.set(-2.3, .6, 3.2);
+camera.position.set(-2.2, 1.2, 6.5);
+controls.target.set(-2.8, .9, 3.2);
 controls.addEventListener( 'change', () => pathTracer.updateCamera() );
 controls.update();
 
