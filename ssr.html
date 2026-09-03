@@ -27,7 +27,6 @@
 		import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 		import { SSRPass } from 'three/addons/postprocessing/SSRPass.js';
 		import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-		import { ReflectorForSSRPass } from 'three/addons/objects/ReflectorForSSRPass.js';
 
         import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
@@ -56,11 +55,85 @@
 			scene = new THREE.Scene();
 			scene.background = new THREE.Color( 0x0 );
             
-            let geometry, material, mesh;
+            let geometry, material;
+			let mesh={};
+
             loader.load( './scene.glb', function ( gltf ) {
                 geometry = gltf.scene;
                 geometry.scale.set(.1,.1,.1);
                 scene.add( geometry );
+
+				scene.traverse(function(child){
+					if(child.name){
+						console.log(child.name)
+						mesh[child.name]=child;
+						// if (child.name == 'Plane001_1') child.removeFromParent();
+					}
+				});
+
+				// mesh['Plane020'].removeFromParent();
+				
+				ssrPass = new SSRPass( {
+					renderer,
+					scene,
+					camera,
+					width: innerWidth,
+					height: innerHeight,
+				} );
+				
+				ssrPass.selects = [mesh['ground'], mesh['credenza_1'], mesh['tv_2']]
+				
+
+				composer.addPass( ssrPass );
+				composer.addPass( new OutputPass() );
+
+				// GUI
+
+				gui = new GUI( { width: 260 } );
+				gui.add( params, 'enableSSR' ).name( 'Enable SSR' );
+				ssrPass.thickness = 0.05;
+				gui.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
+
+				ssrPass.useRoughnessMaps = true;
+				gui.add( ssrPass, 'useRoughnessMaps' );
+				ssrPass.useRoughnessOverride = true;
+				gui.add( ssrPass, 'useRoughnessOverride' );
+
+				ssrPass.roughnessOverride = 0.15;
+				gui.add(ssrPass, 'roughnessOverride').min(0).max(1).step(.0001);
+				ssrPass.roughnessCutoff = 1.;
+				gui.add(ssrPass, 'roughnessCutoff').min(0).max(1).step(.0001);
+
+				ssrPass.infiniteThick = false;
+				gui.add( ssrPass, 'infiniteThick' );
+				gui.add( params, 'autoRotate' ).onChange( () => {
+
+					controls.enabled = ! params.autoRotate;
+
+				} );
+
+				const folder = gui.addFolder( 'more settings' );
+				ssrPass.maxDistance = .5;
+				ssrPass.bouncing = false;
+				folder.add( ssrPass, 'bouncing' );
+				folder.add( ssrPass, 'output', {
+					'Default': SSRPass.OUTPUT.Default,
+					'SSR Only': SSRPass.OUTPUT.SSR,
+					'Beauty': SSRPass.OUTPUT.Beauty,
+					'Depth': SSRPass.OUTPUT.Depth,
+					'Normal': SSRPass.OUTPUT.Normal,
+					'Metalness': SSRPass.OUTPUT.Metalness,
+				} ).onChange( function ( value ) {
+
+					ssrPass.output = value;
+
+				} );
+				ssrPass.opacity = 1;
+				ssrPass.blur = true;
+				folder.add( ssrPass, 'blur' );
+				// folder.open()
+				// gui.close()
+
             },undefined,function(error){console.error(error);});
 
 
@@ -76,6 +149,7 @@
 
 			controls = new OrbitControls( camera, renderer.domElement );
 			controls.enableDamping = true;
+			controls.dampingFactor = .08;
             camera.position.set(-.22, .1, .58);
             controls.target.set(-.23, .06, .32);
 			controls.update();
@@ -91,63 +165,7 @@
 			// composer
 
 			composer = new EffectComposer( renderer );
-			ssrPass = new SSRPass( {
-				renderer,
-				scene,
-				camera,
-				width: innerWidth,
-				height: innerHeight,
-			} );
 
-			composer.addPass( ssrPass );
-			composer.addPass( new OutputPass() );
-
-			// GUI
-
-			gui = new GUI( { width: 260 } );
-			gui.add( params, 'enableSSR' ).name( 'Enable SSR' );
-			ssrPass.thickness = 0.018;
-			gui.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
-
-			ssrPass.useRoughnessMaps = true;
-			gui.add( ssrPass, 'useRoughnessMaps' );
-			ssrPass.useRoughnessOverride = true;
-			gui.add( ssrPass, 'useRoughnessOverride' );
-
-			ssrPass.roughnessOverride = 0.15;
-			gui.add(ssrPass, 'roughnessOverride').min(0).max(1).step(.0001);
-			ssrPass.roughnessCutoff = 1.;
-			gui.add(ssrPass, 'roughnessCutoff').min(0).max(1).step(.0001);
-
-			ssrPass.infiniteThick = false;
-			gui.add( ssrPass, 'infiniteThick' );
-			gui.add( params, 'autoRotate' ).onChange( () => {
-
-				controls.enabled = ! params.autoRotate;
-
-			} );
-
-			const folder = gui.addFolder( 'more settings' );
-			ssrPass.maxDistance = .1;
-            ssrPass.bouncing = true;
-			folder.add( ssrPass, 'bouncing' );
-			folder.add( ssrPass, 'output', {
-				'Default': SSRPass.OUTPUT.Default,
-				'SSR Only': SSRPass.OUTPUT.SSR,
-				'Beauty': SSRPass.OUTPUT.Beauty,
-				'Depth': SSRPass.OUTPUT.Depth,
-				'Normal': SSRPass.OUTPUT.Normal,
-				'Metalness': SSRPass.OUTPUT.Metalness,
-			} ).onChange( function ( value ) {
-
-				ssrPass.output = value;
-
-			} );
-			ssrPass.opacity = 1;
-            ssrPass.blur = false;
-			folder.add( ssrPass, 'blur' );
-			// folder.open()
-			// gui.close()
 
 		}
 
