@@ -65,7 +65,7 @@
 
 				scene.traverse(function(child){
 					if(child.name){
-						console.log(child.name)
+						// console.log(child.name)
 						mesh[child.name]=child;
 						// if (child.name == 'Plane001_1') child.removeFromParent();
 					}
@@ -81,7 +81,13 @@
 					height: innerHeight,
 				} );
 				
-				ssrPass.selects = [mesh['ground'], mesh['credenza_1'], mesh['tv_2']]
+				ssrPass.selects = [
+					mesh['ground'], 
+					mesh['credenza_1'], 
+					mesh['tv_2'],
+					mesh['tabletop_large'],
+					mesh['tabletop_small']
+				]
 				
 
 				composer.addPass( ssrPass );
